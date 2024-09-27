@@ -1,0 +1,30 @@
+@font-face {
+  font-family: "circular";
+  src: url("~/assets/fonts/circular-std-medium-500.ttf") format("ttf"),
+    url("~/assets/fonts/circular-std-medium-500.ttf") format("ttf");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "circular-md";
+  src: url("~/assets/fonts/circular-std-medium-500.ttf") format("ttf"),
+    url("~/assets/fonts/circular-std-medium-500.ttf") format("ttf");
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "circular-bold";
+  src: url("~/assets/fonts/CircularStd-Bold.ttf") format("ttf"),
+    url("~/assets/fonts/CircularStd-Bold.ttf") format("ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "circular-regular";
+  src: url("~/assets/fonts/CircularStd-Medium.otf");
+
+  font-display: swap;
+}
