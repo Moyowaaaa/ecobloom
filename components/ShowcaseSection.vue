@@ -36,13 +36,6 @@
 
       <div class="showcaseSection__projects-section--projects-showcase">
         <ShowcaseCard />
-
-        <!-- <div class="showcaseCard"></div>
-
-        <div class="showcaseCard"></div>
-
-        <div class="showcaseCard"></div>
-        <div class="showcaseCard"></div> -->
       </div>
     </div>
   </div>

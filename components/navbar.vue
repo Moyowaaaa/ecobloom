@@ -1,14 +1,32 @@
 <template>
-  <div class="navbar">
+  <div
+    class="navbar"
+    @mouseover="maximizeNavbarOnScrollUp"
+    @mouseout="minimizeNavbarOnScrollDown"
+  >
     <div
       class="navbar__container"
       ref="navbarRef"
       @mouseover="maximizeNavbarOnScrollUp"
       @mouseout="minimizeNavbarOnScrollDown"
     >
-      <img src="~/assets/images/logo.svg" alt="logo" ref="logoRef" />
+      <NuxtLink to="/" ref="logoRef">
+        <img
+          src="~/assets/images/logo.svg"
+          alt="logo"
+          class="logo"
+          @click="scrollUp()"
+        />
+      </NuxtLink>
+
       <div class="navbar__container--links-container">
-        <p>About Us</p>
+        <NuxtLink
+          to="/about"
+          class="links"
+          :class="{ active: route.path === '/about' }"
+        >
+          <p>About Us</p>
+        </NuxtLink>
         <p>Projects</p>
         <p>Contact Us</p>
       </div>
@@ -22,16 +40,30 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
-
+const router = useRouter();
+const route = useRoute();
 const navbarRef = ref<HTMLDivElement | null>(null);
 const logoRef = ref<HTMLImageElement | null>(null);
 const isScrolledDown = ref<boolean>(false);
 let isAnimating = false;
+console.log(["gfg", route.path]);
+
+const scrollUp = () => {
+  const element = document.getElementById("top");
+  if (element) {
+    const elementPosition =
+      element.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({
+      top: elementPosition - 30,
+      behavior: "smooth",
+    });
+  }
+};
 
 onMounted(() => {
   if (logoRef.value) {
-    gsap.to(logoRef.value, {
-      rotation: 720, // Two full rotations
+    gsap.to(".logo", {
+      rotation: 1080,
       ease: "none",
       delay: 2,
       scrollTrigger: {
@@ -83,6 +115,7 @@ const minimizeNavbarOnScrollDown = () => {
           width: "4rem",
           duration: 0.25,
           ease: "power2.inOut",
+          boxShadow: "0 4px 6px rgba(0, 25, 40, 0.2)",
         },
         "-=0.1"
       );
@@ -102,9 +135,10 @@ const maximizeNavbarOnScrollUp = () => {
 
   if (navbarRef.value && logoRef.value) {
     tl.to(navbarRef.value, {
-      width: "22rem",
+      width: "25.5rem",
       duration: 0.25,
       ease: "power2.inOut",
+      boxShadow: "none",
     }).to(
       navbarRef.value.children[1],
       {
@@ -142,6 +176,12 @@ const maximizeNavbarOnScrollUp = () => {
     justify-content: center;
     transition: width 0.5s ease;
 
+    &--logo-container {
+      width: max-content;
+      height: max-content;
+      // padding: 12px;
+    }
+
     &--links-container {
       display: flex;
       gap: 1.5rem;
@@ -153,8 +193,23 @@ const maximizeNavbarOnScrollUp = () => {
       width: 1.75rem;
     }
     p {
+      padding: 12px;
       min-width: max-content;
+      font-weight: 700;
     }
   }
+}
+
+.links {
+  &:hover {
+    background-color: #fff83c;
+    border-radius: 20px;
+    color: #16270c !important;
+  }
+}
+.active {
+  background-color: #fff83c;
+  border-radius: 20px;
+  color: #16270c;
 }
 </style>

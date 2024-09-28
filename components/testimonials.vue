@@ -73,8 +73,8 @@
             rgba(0, 0, 0, 0.3) 100%
           );
           border-radius: 12.447px;
-          backdrop-filter: blur(8px); /* Adjust the blur value */
-          -webkit-backdrop-filter: blur(8px); /* Safari support */
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
         }
       }
       &:nth-child(3) {
@@ -88,8 +88,8 @@
             rgba(0, 0, 0, 0.3) 100%
           );
           border-radius: 12.447px;
-          backdrop-filter: blur(8px); /* Adjust the blur value */
-          -webkit-backdrop-filter: blur(8px); /* Safari support */
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
         }
       }
     }

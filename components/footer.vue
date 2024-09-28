@@ -64,9 +64,11 @@
           >
             <div
               class="footer__container--main-container__content-container--bottom-section__logo-container"
+              id="logo-container"
+              ref="footerLogoContainer"
             >
               <img src="/assets/images/flowerBlack.png" alt="" />
-              <h1>ecobloom</h1>
+              <h1 id="footer-large-text">ecobloom</h1>
             </div>
 
             <p class="copy">© 2024 EcoBloom Gardens. All Rights Reserved.</p>
@@ -78,7 +80,106 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import gsap from "gsap";
+import { intersectionObserver } from "../animations/useIntersectionObserver";
+import Splitting from "splitting";
+
+const footerLogoContainer = ref<HTMLDivElement | null>(null);
+let cleanup: (() => void) | null = null;
+
+onMounted(() => {
+  const largeText = document.querySelector("#footer-large-text");
+  const logoContainer = document.querySelector("#logo-container");
+  const bottomSectionContainer = document.querySelector(
+    ".footer__container--main-container"
+  );
+  const result = Splitting({ target: largeText, by: "chars" });
+
+  if (bottomSectionContainer) {
+    cleanup = intersectionObserver(
+      bottomSectionContainer,
+      { threshold: 0.2 },
+      (isIntersecting) => {
+        if (isIntersecting) {
+          gsap.fromTo(
+            bottomSectionContainer,
+            { yPercent: 10, opacity: 0 },
+            {
+              duration: 1.2,
+              yPercent: 0,
+              opacity: 1,
+              delay: 0.2,
+              ease: "power4.inOut",
+            }
+          );
+        } else {
+          gsap.to(bottomSectionContainer, {
+            yPercent: 10,
+            opacity: 0,
+          });
+        }
+      }
+    );
+  }
+
+  if (logoContainer) {
+    console.log(result);
+
+    result[0].chars.forEach((a: any) => console.log(a));
+    cleanup = intersectionObserver(
+      logoContainer,
+      { threshold: 0.9 },
+      (isIntersecting) => {
+        if (isIntersecting && footerLogoContainer.value) {
+          gsap.to(footerLogoContainer.value.children[0], {
+            rotation: 720,
+            ease: "none",
+            repeat: -1,
+            duration: 3,
+            delay: 0.5,
+          });
+          gsap.fromTo(
+            ".copy",
+            { yPercent: 10, opacity: 0 },
+            {
+              duration: 1.2,
+              stagger: 0.2,
+              yPercent: 0,
+              opacity: 1,
+              delay: 1.5,
+              ease: "power4.inOut",
+            }
+          );
+          result[0].chars.forEach((a: gsap.TweenTarget, i: number) => {
+            gsap.to(a, {
+              opacity: 1,
+              duration: gsap.utils.random(0.1, 0.3),
+              // duration: 0.2,
+              ease: "power3.inOut",
+              delay: i * gsap.utils.random(0.1, 0.2),
+            });
+          });
+        } else {
+          result[0].chars.forEach((a: gsap.TweenTarget) => {
+            gsap.to(a, {
+              opacity: 0.2,
+              duration: 0.1,
+              ease: "power3.inOut",
+            });
+          });
+        }
+      }
+    );
+  }
+});
+
+onUnmounted(() => {
+  if (cleanup) {
+    cleanup();
+  }
+});
+</script>
 
 <style scoped lang="scss">
 .footer {

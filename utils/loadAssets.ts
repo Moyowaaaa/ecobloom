@@ -1,43 +1,45 @@
 import usePreloadImagesStore from "~/stores/ImagesPreloader";
-import helpingHandImage from "./assets/images/helpinghand.png";
-import zebraAppBaseImage from "~/assets/images/zebra.png";
-import FrothFusionFullImage from "~/assets/images/FrothFull.png";
-import FrothFusionCutImage from "~/assets/images/frothCut.png";
-import TintBoldFullImage from "~/assets/images/tintboltFull.png";
-import TintBoldCutImage from "~/assets/images/tintboltCut.png";
-import ElearningFullImage from "~/assets/images/elearningFull.png";
-import ElearningCutImage from "~/assets/images/elearningCut.png";
-import zebraBannerImage from "~/assets/images/zebraBannerImage.png";
-import zebraSplashImage from "~/assets/images/Splash.png";
-import zebraTypoShowcaseImage from "~/assets/images/zebraShowcase.png";
-import zebraDesignImage1 from "~/assets/images/zebraDesignImage1.png";
-import zebraDesignImage2 from "~/assets/images/zebraDesignImage2.png";
-import zebraDesignImage3 from "~/assets/images/zebraDesignImage3.png";
-import zebraDesignImage4 from "~/assets/images/zebraDesignImage4.png";
-import zebraDesignImage5 from "~/assets/images/zebraDesignImage5.png";
-import zebraDesignImage6 from "~/assets/images/zebraDesignImage6.png";
+import logo from "~/assets/images/logo.svg";
+import flowerSmall from "~/assets/images/flowerSmall.svg";
+import X from "~/assets/images/X.png";
+import linkedin from "~/assets/images/linkedin.png";
+import Instagram from "~/assets/images/instagram.png";
+import flowerBlack from "~/assets/images/flowerBlack.png";
+import bigYellowFlower from "~/assets/images/bigYellowFlower.png";
+import bigBlackFlower from "~/assets/images/bigBlackFlower.png";
+import heroIcon from "~/assets/images/heroIcon.svg";
+import gardenImage from "~/assets/images/gardenImage.png";
+import testimonialsIcon from "~/assets/images/testimonialsIcon.svg";
+import testimonialLeft from "~/assets/images/testimonialLeft.png";
+import testimonialCenter from "~/assets/images/testimonialCenter.png";
+import testimonialRight from "~/assets/images/testimonialRight.png";
+import avatar1 from "~/assets/images/avatar1.png";
+import avatar2 from "~/assets/images/avatar2.png";
+import avatar3 from "~/assets/images/avatar3.png";
+import avatar4 from "~/assets/images/avatar4.png";
 
 export function loadAssets(): Promise<void[]> {
   const preloadImagesStore = usePreloadImagesStore();
 
-  const images = [
-    helpingHandImage,
-    ElearningCutImage,
-    ElearningFullImage,
-    TintBoldCutImage,
-    FrothFusionFullImage,
-    FrothFusionCutImage,
-    zebraAppBaseImage,
-    zebraBannerImage,
-    zebraDesignImage1,
-    zebraDesignImage2,
-    zebraDesignImage3,
-    zebraDesignImage4,
-    zebraDesignImage5,
-    zebraDesignImage6,
-    TintBoldFullImage,
-    zebraSplashImage,
-    zebraTypoShowcaseImage,
+  const images: string[] = [
+    logo,
+    flowerSmall,
+    X,
+    linkedin,
+    Instagram,
+    flowerBlack,
+    bigYellowFlower,
+    bigBlackFlower,
+    heroIcon,
+    gardenImage,
+    testimonialCenter,
+    testimonialLeft,
+    testimonialRight,
+    testimonialsIcon,
+    avatar1,
+    avatar2,
+    avatar3,
+    avatar4,
   ];
 
   preloadImagesStore.numberOfImagesToLoad = images.length;

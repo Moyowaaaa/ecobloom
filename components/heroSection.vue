@@ -32,8 +32,6 @@
         </p>
       </div>
     </div>
-
-    <!-- <img src="" alt="" class="hero-section__bottom-image" /> -->
   </div>
 </template>
 

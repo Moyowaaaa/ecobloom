@@ -8,33 +8,12 @@ export default defineNuxtConfig({
       title: "Ecobloom",
       charset: "UTF-8",
       viewport: "width=device-width, initial-scale=1",
-      meta: [
-        { name: "theme-color", content: "#070606" },
-        { name: "description", content: "UI/UX designer" },
-        { name: "og:description", content: "UI/UX designer" },
-        { name: "twitter:description", content: "UI/UX designer" },
-        { name: "og:title", content: "Israel Adeniyi" },
-        { name: "twitter:title", content: "Israel Adeniyi" },
-        { name: "og:site_name", content: "Israel Adeniyi" },
-        { name: "og:url", content: "is-preview.vercel.app" },
-        { name: "og:type", content: "website" },
-        {
-          name: "og:image",
-          content:
-            "https://res.cloudinary.com/dyap7epew/image/upload/v1717025623/projects/r0jzcy86m6hsldyjppmj.png",
-        },
-        {
-          name: "twitter:image",
-          content:
-            "https://res.cloudinary.com/dyap7epew/image/upload/v1717025623/projects/r0jzcy86m6hsldyjppmj.png",
-        },
-        { name: "twitter:card", content: "summary_large_image" },
-      ],
+
       link: [
         {
           rel: "icon",
           type: "image/png",
-          href: "https://res.cloudinary.com/dyap7epew/image/upload/v1717025623/projects/r0jzcy86m6hsldyjppmj.png",
+          href: "https://res.cloudinary.com/dyap7epew/image/upload/v1717025623/projects/logo_lbcomw",
         },
       ],
     },

@@ -38,7 +38,7 @@
       </div>
 
       <div class="title-section__main-container--scrollButton-container">
-        <div class="button">
+        <div class="button" ref="scrollButtonRef">
           <p>Scroll</p>
           <img src="/assets/images/arrowdown.svg" alt="" />
         </div>
@@ -47,7 +47,34 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import gsap from "gsap";
+
+const scrollButtonRef = ref<HTMLDivElement | null>(null);
+
+onMounted(() => {
+  if (scrollButtonRef.value) {
+    gsap.fromTo(
+      scrollButtonRef.value.children[1],
+      {
+        ease: "none",
+        opacity: 0,
+        y: -5,
+      },
+      {
+        opacity: 1,
+        ease: "power3.inOut",
+        y: 5,
+        duration: 1.5,
+
+        repeat: -1,
+      }
+    );
+
+    console.log("hhh", scrollButtonRef.value.children[1]);
+  }
+});
+</script>
 
 <style scoped lang="scss">
 .title-section {
@@ -60,8 +87,6 @@
   align-items: center;
 
   color: #ffffff;
-  //     padding-left: 3.313rem;
-  //     padding-bottom: 2.5rem;
 
   &__image-container {
     height: 100%;
@@ -112,6 +137,7 @@
 
       .button {
         font-weight: 700;
+        overflow: hidden;
       }
 
       &__avatar-section {
@@ -152,18 +178,5 @@
       justify-content: center;
     }
   }
-
-  //   &__main-container {
-  //     border: 2px solid red;
-  //     z-index: 10;
-  //     position: absolute;
-  //     bottom: 0;
-  //     width: 100%;
-  //     padding-left: 3.313rem;
-  //     padding-bottom: 2.5rem;
-  //     color: #ffffff;
-  //     display: flex;
-  //     flex-direction: column;
-  //   }
 }
 </style>
