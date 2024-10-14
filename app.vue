@@ -1,10 +1,9 @@
 <template>
   <div>
     <Preloader />
-    <!-- <Preloader v-if="!imagesHaveLoaded"/> -->
 
-    <div v-if="imagesHaveLoaded">
-      <NuxtLayout v-if="imagesHaveLoaded">
+    <div v-if="preloaderDone">
+      <NuxtLayout>
         <NuxtPage :transition="transitionObject" />
       </NuxtLayout>
 
@@ -35,17 +34,18 @@ import type { TransitionProps } from "nuxt/dist/app/compat/capi";
 import gsap from "gsap";
 
 const transitionRef = ref<HTMLDivElement | null>(null);
-
 const imagesStore = usePreloadImagesStore();
-const { imagesHaveLoaded } = storeToRefs(imagesStore);
+const { imagesHaveLoaded, preloaderDone } = storeToRefs(imagesStore);
 
-watchEffect(() => {
-  console.log(imagesHaveLoaded.value);
-});
 onMounted(() => {
-  new Interactions();
   if (!imagesHaveLoaded.value) {
     loadAssets();
+  }
+});
+
+watch(preloaderDone, (newValue) => {
+  if (newValue) {
+    new Interactions();
   }
 });
 
@@ -157,6 +157,10 @@ useNuxtApp().hook("page:transition:finish", () => {
   position: fixed;
   height: 100%;
   width: 100vw;
+  display: none;
+}
+
+.hidden {
   display: none;
 }
 </style>

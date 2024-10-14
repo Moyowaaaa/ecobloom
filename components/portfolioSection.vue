@@ -1,11 +1,15 @@
 <template>
   <div class="portfolioSection">
-    <div class="portfolioSection__portfolio-section">
-      <div class="portfolioSection__portfolio-section--title-container">
+    <div class="portfolioSection__portfolio-section" ref="portfolioSectionRef">
+      <div
+        class="portfolioSection__portfolio-section--title-container"
+        ref="portfolioTitleRef"
+        id="portfolioTitle"
+      >
         <div
           class="portfolioSection__portfolio-section--title-container__title"
         >
-          <h1>Our Work Speaks for Itself</h1>
+          <h1 id="portfolioTitle">Our Work Speaks for Itself</h1>
           <p>Explore our portfolio</p>
         </div>
 
@@ -24,6 +28,7 @@
           xmlns="http://www.w3.org/2000/svg"
           @click="scroll('left')"
           class="arrow left-arrow"
+          v-if="!isAtEnd"
         >
           <rect
             x="0.657715"
@@ -63,7 +68,7 @@
             stroke-width="2.35105"
             stroke-linecap="round"
             stroke-linejoin="round"
-            id="left-arrow"
+            id="right-arrow"
           />
         </svg>
       </div>
@@ -85,17 +90,24 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
 import { works } from "../data/works";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import { intersectionObserver } from "~/animations/useIntersectionObserver";
+
+gsap.registerPlugin(ScrollTrigger);
 console.log({ works });
 const galleryRef = ref<HTMLElement | null>(null);
 const scrollLeft = ref(0);
 const maxScroll = ref(0);
+const portfolioSectionRef = ref<HTMLDivElement | null>(null);
+const portfolioTitleRef = ref<HTMLDivElement | null>(null);
+let cleanup: (() => void) | null = null;
 
 const isAtStart = computed(() => Math.round(scrollLeft.value) === 0);
 const isAtEnd = computed(() => Math.round(scrollLeft.value) >= maxScroll.value);
 
 watchEffect(() => {
-  console.log(isAtStart.value, isAtEnd.value, scrollLeft.value);
-  console.log(Math.round(scrollLeft.value), maxScroll.value);
+  console.log([isAtStart.value, isAtEnd.value]);
 });
 
 const checkScrollPosition = () => {
@@ -116,6 +128,71 @@ const scroll = (direction: "left" | "right") => {
 onMounted(() => {
   checkScrollPosition();
   window.addEventListener("resize", checkScrollPosition);
+});
+
+onMounted(() => {
+  const portfolioTitle = document.querySelector("#portfolioTitle");
+
+  // const tl = gsap.timeline({
+  //   scrollTrigger: {
+  //     trigger: portfolioTitle,
+  //     start: "45% 50%",
+  //     scrub: 1,
+  //     markers: true,
+  //   },
+  // });
+
+  // if (portfolioTitleRef.value && portfolioSectionRef.value) {
+  //   tl.from(portfolioTitleRef.value.children, {
+  //     opacity: 0,
+  //     ease: "power2.inOut",
+  //     duration: 1,
+  //     y: 100,
+  //     stagger: 0.2,
+  //   }).from(
+  //     portfolioSectionRef.value.children[1],
+  //     {
+  //       opacity: 0,
+  //       ease: "power2.inOut",
+  //       duration: 1,
+  //       y: 100,
+  //       stagger: 0.2,
+  //     },
+  //     "-=1"
+  //   );
+  // }
+
+  // if (portfolioTitle) {
+  //   cleanup = intersectionObserver(
+  //     portfolioTitle,
+  //     { threshold: 0.2 },
+  //     (isIntersecting) => {
+  //       if (
+  //         isIntersecting &&
+  //         portfolioTitleRef.value &&
+  //         portfolioSectionRef.value
+  //       ) {
+  //         tl.from(portfolioTitleRef.value.children, {
+  //           opacity: 0,
+  //           ease: "power2.inOut",
+  //           duration: 1,
+  //           y: 100,
+  //           stagger: 0.2,
+  //         }).from(
+  //           portfolioSectionRef.value.children[1],
+  //           {
+  //             opacity: 0,
+  //             ease: "power2.inOut",
+  //             duration: 1,
+  //             y: 100,
+  //             stagger: 0.2,
+  //           },
+  //           "-=1"
+  //         );
+  //       }
+  //     }
+  //   );
+  // }
 });
 </script>
 
@@ -144,6 +221,8 @@ onMounted(() => {
         display: flex;
         flex-direction: column;
         gap: 0.688rem;
+        max-height: max-content;
+        overflow: hidden;
 
         h1 {
           color: #333;
@@ -152,6 +231,8 @@ onMounted(() => {
           font-style: normal;
           font-weight: 700;
           line-height: normal;
+          max-height: max-content;
+          overflow: hidden;
         }
 
         p {
@@ -162,6 +243,8 @@ onMounted(() => {
           font-weight: 450;
           line-height: normal;
           max-width: 42rem;
+          max-height: max-content;
+          overflow: hidden;
         }
       }
     }
@@ -175,6 +258,8 @@ onMounted(() => {
       margin-bottom: 1rem;
       padding: 0 2rem;
       position: relative;
+      max-height: max-content;
+      overflow: hidden;
 
       svg {
         &:nth-child(1) {
@@ -193,6 +278,7 @@ onMounted(() => {
       gap: 1.875rem;
       padding-left: 2rem;
       padding-bottom: 2rem;
+      margin-top: 1rem;
 
       &::-webkit-scrollbar {
         display: none;

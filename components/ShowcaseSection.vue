@@ -1,6 +1,7 @@
 <template>
   <div class="showcaseSection">
     <div class="showcaseSection__projects-section">
+      <!-- Title Section -->
       <div class="showcaseSection__projects-section--title-container">
         <div class="showcaseSection__projects-section--title-container__title">
           <h1>What We Actually Do</h1>
@@ -9,7 +10,6 @@
             we’ll help bring your Gardens to life
           </p>
         </div>
-
         <div class="button">
           <p>Get a Quote Now</p>
           <svg
@@ -34,14 +34,119 @@
         </div>
       </div>
 
+      <!-- Showcase Cards -->
       <div class="showcaseSection__projects-section--projects-showcase">
-        <ShowcaseCard />
+        <ShowcaseCard
+          v-for="(showcase, index) in showcases"
+          :key="index"
+          :showcase="showcase"
+          :progress-time="currentTime"
+          :current-visible-index="visibleShowcaseIndex"
+          :class="[
+            'showcaseCard',
+            { isVisible: visibleShowcaseIndex === index },
+            {
+              isNext:
+                index === visibleShowcaseIndex + 1 ||
+                (visibleShowcaseIndex === showcases.length - 1 && index === 0),
+            },
+          ]"
+        />
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted, nextTick, watchEffect } from "vue";
+import { showcases } from "../data/showcases";
+import gsap from "gsap";
+import customInterval from "../utils/interval";
+
+const visibleShowcaseIndex = ref(0);
+const intervalFunction = () => {
+  visibleShowcaseIndex.value =
+    (visibleShowcaseIndex.value + 1) % showcases.length;
+  animateCards();
+};
+
+const { play, pause, stop, currentTime } = customInterval(
+  intervalFunction,
+  5000
+);
+
+const animateCards = () => {
+  const cards = document.querySelectorAll(".showcaseCard");
+  const baseScale = 1;
+  const scaleStep = 0.2;
+  const nextIndex = (visibleShowcaseIndex.value + 1) % showcases.length;
+
+  cards.forEach((card, index) => {
+    const isVisible = visibleShowcaseIndex.value === index;
+    const isNext = nextIndex === index;
+    const scaleValue = baseScale - index * scaleStep;
+
+    const marginTopValue = `${index * 2}rem`;
+
+    gsap.set(card, {
+      zIndex: isVisible ? 20 : isNext ? 15 : 10 - index,
+      marginTop: isVisible ? "0rem" : isNext ? "1rem" : marginTopValue,
+      opacity: isVisible ? 1 : isNext ? 0.9 : 0.8,
+      scale: isVisible ? 1 : isNext ? 0.9 : scaleValue,
+    });
+
+    gsap.to(card, {
+      marginTop: isVisible ? "0rem" : isNext ? "3rem" : marginTopValue,
+      duration: 0.5,
+      ease: "power1.inOut",
+      opacity: isVisible ? 1 : isNext ? 0.9 : 0.8,
+      scale: isVisible ? 1 : isNext ? 0.9 : scaleValue,
+    });
+  });
+};
+
+const handleVisibleShowcase = (index: number) => {
+  visibleShowcaseIndex.value = index;
+  animateCards();
+  play(); // Restart the interval
+};
+
+const initialWindowWidth = ref(0);
+
+const onWindowResize = () => {
+  if (typeof window !== "undefined") {
+    if (window.innerWidth >= 768 && initialWindowWidth.value < 768) {
+      play();
+    } else if (window.innerWidth < 768 && initialWindowWidth.value >= 768) {
+      stop();
+    }
+    initialWindowWidth.value = window.innerWidth;
+  }
+};
+
+onMounted(() => {
+  if (typeof window !== "undefined") {
+    initialWindowWidth.value = window.innerWidth;
+
+    if (window.innerWidth >= 768) {
+      play();
+    }
+
+    nextTick(() => {
+      animateCards();
+    });
+
+    window.addEventListener("resize", onWindowResize);
+  }
+});
+
+onUnmounted(() => {
+  if (typeof window !== "undefined") {
+    stop();
+    window.removeEventListener("resize", onWindowResize);
+  }
+});
+</script>
 
 <style scoped lang="scss">
 .showcaseSection {
@@ -88,43 +193,55 @@
         }
       }
     }
+  }
+}
 
-    &--projects-showcase {
-      width: 100%;
-      position: absolute;
-      top: 10rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+.isVisible {
+  transform: translateY(0) rotate(0deg);
+  // z-index: 99999999;
+  opacity: 1;
+}
 
-      .showcaseCard {
-        width: 100%;
-        height: 35.688rem;
-        border-radius: 21.571px;
-        background: #16270c;
-        position: absolute;
-        z-index: 5;
+.showcaseSection__projects-section--projects-showcase {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  // height: 38rem;
+  // max-height: 38rem;
+  // overflow: hidden !important  ;
 
-        &:nth-child(2) {
-          margin-top: 1.25rem;
-          width: 99%;
-          background-color: #fff83c;
-          z-index: 4;
-        }
-        &:nth-child(3) {
-          margin-top: 2.5rem;
-          width: 98%;
-          background-color: #3d4c0a;
-          z-index: 3;
-        }
-        &:nth-child(4) {
-          margin-top: 3.75rem;
-          width: 97%;
-          background-color: #5c2d4e;
-          z-index: 2;
-        }
-      }
+  .showcaseCard {
+    width: 100%;
+    height: 35.688rem;
+    max-height: 35.688rem;
+    border-radius: 21.571px;
+    position: absolute;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+
+    &:nth-child(1) {
+      z-index: 4;
     }
+    &:nth-child(2) {
+      z-index: 3;
+    }
+    &:nth-child(3) {
+      z-index: 2;
+    }
+    &:nth-child(4) {
+      z-index: 1;
+    }
+  }
+
+  .isVisible {
+    opacity: 1;
+  }
+
+  .isNext {
+    z-index: 5;
+    opacity: 0.8;
   }
 }
 </style>

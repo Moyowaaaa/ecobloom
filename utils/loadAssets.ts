@@ -9,6 +9,9 @@ import bigYellowFlower from "~/assets/images/bigYellowFlower.png";
 import bigBlackFlower from "~/assets/images/bigBlackFlower.png";
 import heroIcon from "~/assets/images/heroIcon.svg";
 import gardenImage from "~/assets/images/gardenImage.png";
+import landscaping from "~/assets/images/landscaping.png";
+import maintenance from "~/assets/images/maintenance.png";
+import eco from "~/assets/images/eco.png";
 import testimonialsIcon from "~/assets/images/testimonialsIcon.svg";
 import testimonialLeft from "~/assets/images/testimonialLeft.png";
 import testimonialCenter from "~/assets/images/testimonialCenter.png";
@@ -32,6 +35,9 @@ export function loadAssets(): Promise<void[]> {
     bigBlackFlower,
     heroIcon,
     gardenImage,
+    maintenance,
+    eco,
+    landscaping,
     testimonialCenter,
     testimonialLeft,
     testimonialRight,

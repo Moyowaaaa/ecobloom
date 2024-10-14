@@ -1,25 +1,51 @@
 <template>
-  <div class="showcaseCard">
+  <div
+    class="showcaseCard"
+    :style="{ backgroundColor: `${showcase.background}` }"
+  >
     <div class="showcaseCard__loading-bar">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+      <div
+        v-for="n in 4"
+        :key="n"
+        class="loading-bar-item"
+        :class="{ increase: currentVisibleIndex === n - 1 }"
+      >
+        <div
+          class="grow-bar"
+          :class="{ 'active-grow': currentVisibleIndex === n - 1 }"
+          :style="
+            currentVisibleIndex === n - 1
+              ? { backgroundColor: showcase.text.headerColor }
+              : {}
+          "
+        ></div>
+      </div>
     </div>
 
     <div class="showcaseCard__text-container">
-      <h1>Garden Design</h1>
-      <p>
-        Custom garden designs that blend aesthetics with sustainability. Our
-        expert designers work with you to create a personalized plan that suits
-        your vision and lifestyle.
+      <h1 :style="{ color: `${showcase.text.headerColor}` }">
+        {{ showcase.title }}
+      </h1>
+      <p :style="{ color: `${showcase.text.descColor}` }">
+        {{ showcase.desc }}
       </p>
     </div>
-    <img src="/assets/images/gardenImage.png" alt="" />
+    <img :src="showcase.image" alt="" />
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import customInterval from "../utils/interval";
+import type { showcase } from "~/types/declarations";
+
+interface showcaseProps {
+  showcase: showcase;
+  progressTime: number;
+  currentVisibleIndex: number;
+}
+
+defineProps<showcaseProps>();
+</script>
 
 <style scoped lang="scss">
 .showcaseCard {
@@ -30,6 +56,7 @@
   position: relative;
   padding: 2rem 2rem 2rem 2.5rem;
   display: flex;
+  gap: 4rem;
   justify-content: space-between;
 
   &__loading-bar {
@@ -44,13 +71,9 @@
     div {
       border-radius: 12px;
       background: #819c72;
-      height: 5px;
+      min-height: 5px;
       width: 2.5rem;
-      &:nth-child(1) {
-        width: 7rem;
-        border-radius: 12px;
-        background: #efe93f;
-      }
+      z-index: 20;
     }
   }
 
@@ -74,13 +97,39 @@
     }
 
     p {
-      color: #fff;
       font-size: 1.375rem;
       font-style: normal;
       font-weight: 450;
       line-height: normal;
       max-width: 40rem;
     }
+  }
+}
+
+.increase {
+  min-height: 5px;
+  width: 7rem !important;
+}
+
+.grow-bar {
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.1s linear;
+}
+
+.active-grow {
+  border-radius: 6px;
+  animation: grow 5.1s linear forwards;
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(2.8);
   }
 }
 </style>

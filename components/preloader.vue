@@ -1,5 +1,5 @@
 <template>
-  <div class="loader" ref="loaderRef" v-if="!imagesHaveLoaded">
+  <div class="loader" ref="loaderRef">
     <svg
       width="14"
       height="15"
@@ -17,25 +17,32 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, watch } from "vue";
+import { storeToRefs } from "pinia";
 import usePreloadImagesStore from "~/stores/ImagesPreloader";
 import gsap from "gsap";
 
 const imagesStore = usePreloadImagesStore();
-const { imagesHaveLoaded } = storeToRefs(imagesStore);
+const { imagesHaveLoaded, preloaderDone } = storeToRefs(imagesStore);
 
 const loaderRef = ref<HTMLDivElement | null>(null);
-onMounted(() => {
+const showLoader = ref(true);
+
+const preloaderTransitionIn = () => {
   if (!loaderRef.value) return;
+
   gsap.set(loaderRef.value.children[1], {
     display: "none",
     opacity: 0,
   });
+
   gsap.to(loaderRef.value.children[0], {
-    rotation: 720, // Two full rotations
+    rotation: 720,
     ease: "none",
     repeat: -1,
     duration: 5,
   });
+
   gsap.fromTo(
     loaderRef.value.children[1],
     {
@@ -52,6 +59,7 @@ onMounted(() => {
       duration: 1.5,
     }
   );
+
   gsap.to(loaderRef.value.children[0], {
     fill: "#FFF83C",
     duration: 1,
@@ -59,6 +67,11 @@ onMounted(() => {
     ease: "power2.inOut",
     zIndex: 60,
   });
+};
+
+const preloaderTransitionOut = () => {
+  if (!loaderRef.value) return;
+
   gsap.to(loaderRef.value.children, {
     opacity: 1,
     display: "flex",
@@ -67,6 +80,9 @@ onMounted(() => {
     duration: 1,
     delay: 2,
     height: "40vh",
+    onComplete: () => {
+      preloaderDone.value = true;
+    },
   });
   gsap.to(loaderRef.value, {
     opacity: 1,
@@ -77,6 +93,22 @@ onMounted(() => {
     delay: 2.1,
     zIndex: -20,
   });
+  gsap.to(loaderRef.value, {
+    opacity: 0,
+    display: "none",
+    duration: 1,
+    delay: 3,
+  });
+};
+
+onMounted(() => {
+  preloaderTransitionIn();
+});
+
+watch(imagesHaveLoaded, (newValue) => {
+  if (newValue) {
+    preloaderTransitionOut();
+  }
 });
 </script>
 
@@ -91,7 +123,6 @@ onMounted(() => {
   display: flex;
   top: 0;
   left: 0;
-
   align-items: center;
   justify-content: center;
 

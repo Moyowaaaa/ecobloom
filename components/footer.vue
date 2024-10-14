@@ -33,8 +33,12 @@
 
               <div>
                 <div>
-                  <p>Home</p>
-                  <p>About us</p>
+                  <NuxtLink to="/" @click="scrollUp()">
+                    <p>Home</p>
+                  </NuxtLink>
+                  <NuxtLink to="/about" class="links" @click="scrollUp()">
+                    <p>About us</p>
+                  </NuxtLink>
                   <p>Services</p>
                   <p>Projects</p>
                 </div>
@@ -83,7 +87,7 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { intersectionObserver } from "../animations/useIntersectionObserver";
-import Splitting from "splitting";
+import SplitType from "split-type";
 
 const footerLogoContainer = ref<HTMLDivElement | null>(null);
 let cleanup: (() => void) | null = null;
@@ -94,7 +98,10 @@ onMounted(() => {
   const bottomSectionContainer = document.querySelector(
     ".footer__container--main-container"
   );
-  const result = Splitting({ target: largeText, by: "chars" });
+
+  const result = SplitType.create("#footer-large-text", {
+    types: "chars",
+  });
 
   if (bottomSectionContainer) {
     cleanup = intersectionObserver(
@@ -124,9 +131,6 @@ onMounted(() => {
   }
 
   if (logoContainer) {
-    console.log(result);
-
-    result[0].chars.forEach((a: any) => console.log(a));
     cleanup = intersectionObserver(
       logoContainer,
       { threshold: 0.9 },
@@ -151,23 +155,25 @@ onMounted(() => {
               ease: "power4.inOut",
             }
           );
-          result[0].chars.forEach((a: gsap.TweenTarget, i: number) => {
-            gsap.to(a, {
-              opacity: 1,
-              duration: gsap.utils.random(0.1, 0.3),
-              // duration: 0.2,
-              ease: "power3.inOut",
-              delay: i * gsap.utils.random(0.1, 0.2),
+          result.chars &&
+            result.chars.forEach((a: gsap.TweenTarget, i: number) => {
+              gsap.to(a, {
+                opacity: 1,
+                duration: gsap.utils.random(0.1, 0.3),
+                // duration: 0.2,
+                ease: "power3.inOut",
+                delay: i * gsap.utils.random(0.1, 0.2),
+              });
             });
-          });
         } else {
-          result[0].chars.forEach((a: gsap.TweenTarget) => {
-            gsap.to(a, {
-              opacity: 0.2,
-              duration: 0.1,
-              ease: "power3.inOut",
+          result.chars &&
+            result.chars.forEach((a: gsap.TweenTarget) => {
+              gsap.to(a, {
+                opacity: 0.2,
+                duration: 0.1,
+                ease: "power3.inOut",
+              });
             });
-          });
         }
       }
     );
@@ -179,6 +185,17 @@ onUnmounted(() => {
     cleanup();
   }
 });
+const scrollUp = () => {
+  const element = document.getElementById("top");
+  if (element) {
+    const elementPosition =
+      element.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({
+      top: elementPosition - 30,
+      behavior: "smooth",
+    });
+  }
+};
 </script>
 
 <style scoped lang="scss">
@@ -192,6 +209,7 @@ onUnmounted(() => {
   // border-radius: 12px 12px 0px 0px;
   box-sizing: border-box;
   background-color: white;
+  overflow: hidden;
 
   z-index: 50;
   color: #fdfdfd;

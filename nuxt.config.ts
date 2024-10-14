@@ -36,4 +36,5 @@ export default defineNuxtConfig({
       "/sw.js": { target: "/_nuxt/assets/service-worker.js", ws: true },
     },
   },
+  ssr: true,
 });

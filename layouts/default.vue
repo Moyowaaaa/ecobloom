@@ -18,7 +18,7 @@
   width: 100%;
   margin: 0 auto;
   max-width: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
   opacity: 1;
 
   &__container {

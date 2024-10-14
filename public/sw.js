@@ -21,6 +21,14 @@ const ASSETS_TO_CACHE = [
   "/_nuxt/assets/images/avatar2.png",
   "/_nuxt/assets/images/avatar3.png",
   "/_nuxt/assets/images/avatar4.png",
+  "/_nuxt/assets/images/showcase1.png",
+  "/_nuxt/assets/images/showcase2.png",
+  "/_nuxt/assets/images/showcase3.png",
+  "/_nuxt/assets/images/showcase4.png",
+  "/_nuxt/assets/images/showcase5.png",
+  "/_nuxt/assets/images/flowerHat.svg",
+  "/_nuxt/assets/images/styledFlower.svg",
+  "/_nuxt/assets/images/schoolFlower.svg",
 
   // Add other paths to assets you want to cache
 ];

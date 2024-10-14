@@ -18,9 +18,10 @@
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
     "@studio-freight/lenis": "^1.0.19",
+    "@vueuse/core": "^11.1.0",
     "events": "^3.3.0",
     "gsap": "^3.12.2",
     "pinia": "^2.1.7",
-    "splitting": "^1.0.6"
+    "split-type": "^0.3.4"
   }
 }

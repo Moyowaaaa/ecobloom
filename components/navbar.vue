@@ -1,14 +1,9 @@
 <template>
-  <div
-    class="navbar"
-    @mouseover="maximizeNavbarOnScrollUp"
-    @mouseout="minimizeNavbarOnScrollDown"
-  >
+  <div class="navbar">
     <div
       class="navbar__container"
       ref="navbarRef"
       @mouseover="maximizeNavbarOnScrollUp"
-      @mouseout="minimizeNavbarOnScrollDown"
     >
       <NuxtLink to="/" ref="logoRef">
         <img
@@ -62,17 +57,24 @@ const scrollUp = () => {
 
 onMounted(() => {
   if (logoRef.value) {
+    const totalRotation = 1440; // Two full rotations
+
+    // Refresh ScrollTrigger after hero section is pinned
+    ScrollTrigger.refresh();
+
     gsap.to(".logo", {
-      rotation: 1080,
+      rotation: 1100,
       ease: "none",
-      delay: 2,
       scrollTrigger: {
-        trigger: document.body,
+        trigger: "body",
         start: "top top",
-        end: "bottom bottom",
+        end: "bottom+=1000", // Extend the end point to accommodate the pinned section
         scrub: true,
         onUpdate: (self) => {
-          // Check scroll direction
+          const progress = self.progress;
+          const currentRotation = progress * totalRotation;
+          gsap.set(".logo", { rotation: currentRotation });
+
           if (self.direction === 1 && !isScrolledDown.value) {
             isScrolledDown.value = true;
             minimizeNavbarOnScrollDown();
@@ -161,7 +163,7 @@ const maximizeNavbarOnScrollUp = () => {
   padding: 1.751rem 0;
   align-items: center;
   justify-content: center;
-  z-index: 20;
+  z-index: 30;
   cursor: pointer;
 
   &__container {
